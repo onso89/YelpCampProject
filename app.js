@@ -3,34 +3,14 @@ var express     = require("express"),
     bodyParser  = require("body-parser"),
     mongoose = require("mongoose");
     mongoose.Promise = global.Promise;
+var Campground = require("./models/campground"),
+    seedDB     = require("./seeds");
 
+seedDB();
 mongoose.connect("mongodb://localhost/yelp_camp", {useMongoClient: true});
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
-//Schema Set UP
-var campgroundSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String,
-});
-
-var Campground = mongoose.model("Campground", campgroundSchema);
-
-// Campground.create(
-//     {
-//     name: "Granite Hill", 
-//     image:"http://www.photosforclass.com/download/7121863467",
-//     description: "This is a huge granite hill, no bathrooms. No water, beautiful Granite!"
-//     }
-//     , function(err, campground){
-//     if(err){
-//         console.log(err);
-//     } else {
-//         console.log("New Campground Created: ");
-//         console.log(campground);
-//     }
-// });
 
 
 app.get("/",function(req, res){
@@ -79,6 +59,7 @@ app.get("/campgrounds/:id", function(req, res) {
         if(err){
             console.log(err);
         } else{
+        console.log(foundCampground);    
         //render show template with that ID
          res.render("show", {campgroud: foundCampground});
         }
